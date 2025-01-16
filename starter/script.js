@@ -65,15 +65,30 @@ const renderCountry = function (data, className = '') {
 // getCountryAndNeighbour('Portugal');
 // //getCountryAndNeighbour('Lithuania');
 
-console.log(`~~~ Promises~~~`);
+// console.log(`~~~ Promises~~~`);
 
-// const request = fetch(`https://restcountries.com/v3.1/name/portugal`);
-// console.log(request);
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(response => response.json())
+//     .then(data => renderCountry(data[0]));
+// };
 
+// getCountryData('Portugal');
+
+console.log(`~~~ Chaining Promises ~~~`);
+// Country 1
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => response.json())
-    .then(data => renderCountry(data[0]));
+    .then(data => {
+      renderCountry(data[0]);
+      const neigh = data[0].borders?.[0];
+
+      // Country 2
+      return fetch(`https://restcountries.com/v3.1/alpha/${neigh}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data[0], 'neighbour'));
 };
 
-getCountryData('Portugal');
+getCountryData('portugal');
