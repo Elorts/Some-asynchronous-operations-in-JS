@@ -1,12 +1,12 @@
 'use strict';
 
-// Countries info app:
-const btn = document.querySelector('.btn-country');
-const countriesContainer = document.querySelector('.countries');
-const renderError = function (msg) {
-  countriesContainer.insertAdjacentText('beforeend', msg);
-  // countriesContainer.style.opacity = 1;
-};
+// // Countries info app:
+// const btn = document.querySelector('.btn-country');
+// const countriesContainer = document.querySelector('.countries');
+// const renderError = function (msg) {
+//   countriesContainer.insertAdjacentText('beforeend', msg);
+//   // countriesContainer.style.opacity = 1;
+// };
 
 // ///////////////////////////////////////
 // const getCountryAndNeighbour = function (country) {
@@ -14,28 +14,28 @@ const renderError = function (msg) {
 //   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
 //   request.send();
 //   // AJAX call country 1
-const renderCountry = function (data, className = '') {
-  const html = `
-  <article class="country ${className}">
-          <img class="country__img" src="${data.flags.png}" />
-          <div class="country__data">
-            <h3 class="country__name">${data.name.common}</h3>
-            <h4 class="country__region">${data.region}</h4>
-            <p class="country__row"><span>👫</span>${(
-              +data.population / 1000000
-            ).toFixed(1)} million people</p>
-            <p class="country__row"><span>🗣️</span>${
-              Object.values(data.languages)[0]
-            }</p>
-            <p class="country__row"><span>💰</span>${
-              Object.values(data.currencies)[0].name
-            }</p>
-          </div>
-        </article>
-        `;
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  // countriesContainer.style.opacity = 1;
-};
+// const renderCountry = function (data, className = '') {
+//   const html = `
+//   <article class="country ${className}">
+//           <img class="country__img" src="${data.flags.png}" />
+//           <div class="country__data">
+//             <h3 class="country__name">${data.name.common}</h3>
+//             <h4 class="country__region">${data.region}</h4>
+//             <p class="country__row"><span>👫</span>${(
+//               +data.population / 1000000
+//             ).toFixed(1)} million people</p>
+//             <p class="country__row"><span>🗣️</span>${
+//               Object.values(data.languages)[0]
+//             }</p>
+//             <p class="country__row"><span>💰</span>${
+//               Object.values(data.currencies)[0].name
+//             }</p>
+//           </div>
+//         </article>
+//         `;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   // countriesContainer.style.opacity = 1;
+// };
 
 //   request.addEventListener('load', function () {
 //     const [data] = JSON.parse(this.responseText);
@@ -161,11 +161,11 @@ const renderCountry = function (data, className = '') {
 // lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
 // Promisifying setTimeout
-// const wait = function (seconds) {
-//   return new Promise(function (resolve) {
-//     setTimeout(resolve, seconds * 1000);
-//   });
-// };
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
 
 // wait(1)
 //   .then(() => {
@@ -185,16 +185,59 @@ const renderCountry = function (data, className = '') {
 // Promise.resolve(`abc`).then(x => console.log(x));
 // Promise.reject(new Error(`problem`)).catch(x => console.error(x)));
 
-console.log('**** Promisifying the Geolocation API ****');
+// console.log('**** Promisifying the Geolocation API ****');
 
-const getPosition = function () {
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+
+// getPosition().then(pos => console.log(pos));
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+console.log(`### Coding Challenge #2 ####`);
+
+const imgContainer = document.querySelector(`.images`);
+
+let currentImg;
+
+const createImage = function (imgPath) {
   return new Promise(function (resolve, reject) {
-    // navigator.geolocation.getCurrentPosition(
-    //   position => resolve(position),
-    //   err => reject(err)
-    // );
-    navigator.geolocation.getCurrentPosition(resolve, reject);
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.alt = 'Mountains';
+
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('Image not found'));
+    });
   });
 };
 
-getPosition().then(pos => console.log(pos));
+createImage(`img/img-1.jpg`)
+  .then(img => {
+    currentImg = img;
+    console.log('Img loaded!');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    console.log(`After 2 secs...`);
+    return createImage(`img/img-2.jpg`);
+  })
+  .then(img => {
+    currentImg = img;
+    console.log('Img loaded!');
+    return wait(2);
+  })
+  .catch(error => console.error(error));
