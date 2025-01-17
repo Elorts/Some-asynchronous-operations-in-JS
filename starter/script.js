@@ -134,13 +134,53 @@ const renderCountry = function (data, className = '') {
 // whereAmI(-10.933, 18.474);
 // whereAmI(-90.933, 18.474);
 
-console.log('**** The Event Loop in Practice ****');
+// console.log('**** The Event Loop in Practice ****');
 
-console.log(`Test start!`);
-setTimeout(() => console.log(`0 sec timer`), 0);
-Promise.resolve(`resolved promise 1`).then(res => console.log(res));
-Promise.resolve(`resolved promise 2`).then(res => {
-  for (let i = 0; i < 10000000000000; i++) {}
-  console.log(res);
-});
-console.log(`Test end!`);
+// console.log(`Test start!`);
+// setTimeout(() => console.log(`0 sec timer`), 0);
+// Promise.resolve(`resolved promise 1`).then(res => console.log(res));
+// Promise.resolve(`resolved promise 2`).then(res => {
+//   for (let i = 0; i < 10000000000000; i++) {}
+//   console.log(res);
+// });
+// console.log(`Test end!`);
+
+console.log('**** Building a Simple Promise ****');
+
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   console.log(`Lottery happening!....`);
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) {
+//       resolve(`You WIINN!!!!`);
+//     } else {
+//       reject(new Error(`You loose :( `));
+//     }
+//   }, 2000);
+// });
+
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+// Promisifying setTimeout
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(1)
+  .then(() => {
+    console.log(`I waited for 1 seconds`);
+    return wait(1);
+  })
+  .then(() => {
+    console.log(`I waited for 2 seconds`);
+    return wait(1);
+  })
+  .then(() => {
+    console.log(`I waited for 3 seconds`);
+    return wait(1);
+  })
+  .then(() => console.log(`I waited for 4 second`));
+
+Promise.resolve(`abc`).then(x => console.log(x));
+Promise.reject(new Error(`problem`)).catch(x => console.error(x));
