@@ -3,7 +3,6 @@
 // Countries info app:
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
-
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
   // countriesContainer.style.opacity = 1;
@@ -34,9 +33,6 @@ const renderCountry = function (data, className = '') {
           </div>
         </article>
         `;
-
-  console.log(html);
-
   countriesContainer.insertAdjacentHTML('beforeend', html);
   // countriesContainer.style.opacity = 1;
 };
@@ -91,18 +87,10 @@ const getJSON = function (url, errorMsg = 'Something went wrong') {
 
 // Country 1
 const getCountryData = function (country) {
-  // fetch(`https://restcountries.com/v3.1/name/${country}`)
-  //   .then(response => {
-  //     console.log(response);
-
-  //     if (!response.ok) throw new Error(`Country not found ${response.status}`);
-  //     return response.json();
-  //   })
   getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not found')
     .then(data => {
       renderCountry(data[0]);
       const neigh = data[0].borders?.[0];
-
       if (!neigh) throw new Error('No neighbour found!');
 
       // Country 2
@@ -110,9 +98,7 @@ const getCountryData = function (country) {
         `https://restcountries.com/v3.1/alpha/${neigh}`,
         'Country not found'
       );
-      // fetch(`https://restcountries.com/v3.1/alpha/${neigh}`);
     })
-    // .then(response => response.json())
     .then(data => renderCountry(data[0], 'neighbour'))
     .catch(err => {
       console.error(`${err} ***`);
@@ -123,8 +109,27 @@ const getCountryData = function (country) {
     });
 };
 
-btn.addEventListener('click', function () {
-  getCountryData('australia');
-});
-
 // getCountryData('portugasdfgdsl');
+
+console.log(` ---------------- Challenge 1 --------------------`);
+
+const whereAmI = function (lat, lng) {
+  fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`
+  )
+    .then(response => {
+      if (!response.ok) throw new Error(`N/D Error`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(`You are in ${data.city}, ${data.countryName}`);
+      btn.addEventListener('click', function () {
+        getCountryData(data.countryName);
+      });
+    })
+    .catch(err => console.error(`Something went wrong: ${err}`));
+};
+
+whereAmI(-33.933, 18.474);
+whereAmI(-10.933, 18.474);
+whereAmI(-90.933, 18.474);
