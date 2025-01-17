@@ -145,7 +145,7 @@ const renderCountry = function (data, className = '') {
 // });
 // console.log(`Test end!`);
 
-console.log('**** Building a Simple Promise ****');
+// console.log('**** Building a Simple Promise ****');
 
 // const lotteryPromise = new Promise(function (resolve, reject) {
 //   console.log(`Lottery happening!....`);
@@ -161,26 +161,40 @@ console.log('**** Building a Simple Promise ****');
 // lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
 // Promisifying setTimeout
-const wait = function (seconds) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, seconds * 1000);
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// wait(1)
+//   .then(() => {
+//     console.log(`I waited for 1 seconds`);
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log(`I waited for 2 seconds`);
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log(`I waited for 3 seconds`);
+//     return wait(1);
+//   })
+//   .then(() => console.log(`I waited for 4 second`));
+
+// Promise.resolve(`abc`).then(x => console.log(x));
+// Promise.reject(new Error(`problem`)).catch(x => console.error(x)));
+
+console.log('**** Promisifying the Geolocation API ****');
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 };
 
-wait(1)
-  .then(() => {
-    console.log(`I waited for 1 seconds`);
-    return wait(1);
-  })
-  .then(() => {
-    console.log(`I waited for 2 seconds`);
-    return wait(1);
-  })
-  .then(() => {
-    console.log(`I waited for 3 seconds`);
-    return wait(1);
-  })
-  .then(() => console.log(`I waited for 4 second`));
-
-Promise.resolve(`abc`).then(x => console.log(x));
-Promise.reject(new Error(`problem`)).catch(x => console.error(x));
+getPosition().then(pos => console.log(pos));
