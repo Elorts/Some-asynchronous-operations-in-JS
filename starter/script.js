@@ -274,11 +274,26 @@ const whereAmI = async function () {
     const data = await res.json();
     console.log('data: ', data);
     renderCountry(data[0]);
+    return `You are in ${dataGeo.city}, ${dataGeo.countryName}`;
   } catch (err) {
     console.error(err);
     renderError(`Somethig went wrong 🚒 ${err.message}`);
+
+    // Reject promise returned from async function
+    throw err;
   }
 };
 
-whereAmI();
-console.log('First!!!');
+console.log(`1: Will get location`);
+// const city = whereAmI();
+// console.log(city);
+
+(async function () {
+  try {
+    const city = await whereAmI();
+    console.log(city);
+  } catch (err) {
+    console.error(err);
+  }
+  console.log(`3. Finished getting location`);
+})();
