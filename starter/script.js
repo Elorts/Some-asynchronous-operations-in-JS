@@ -359,20 +359,37 @@ const createImage = function (imgPath) {
   });
 };
 
-createImage(`img/img-1.jpg`)
-  .then(img => {
+const loadNPause = async function () {
+  try {
+    const img = await createImage(`img/img-1.jpg`);
     currentImg = img;
-    return wait(2);
-  })
-  .then(() => {
+    await wait(2);
     currentImg.style.display = 'none';
-    return createImage(`img/img-2.jpg`);
-  })
-  .then(img => {
+    await createImage(`img/img-2.jpg`);
     currentImg = img;
-    return wait(2);
-  })
-  .then(() => {
+    await wait(2);
     currentImg.style.display = 'none';
-  })
-  .catch(error => console.error(error));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+loadNPause();
+
+// createImage(`img/img-1.jpg`)
+//   .then(img => {
+//     currentImg = img;
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage(`img/img-2.jpg`);
+//   })
+// .then(img => {
+//   currentImg = img;
+//   return wait(2);
+// })
+// .then(() => {
+//   currentImg.style.display = 'none';
+// })
+// .catch(error => console.error(error));
