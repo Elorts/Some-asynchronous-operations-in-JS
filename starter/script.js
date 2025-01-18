@@ -298,7 +298,7 @@ console.log(`1: Will get location`);
   console.log(`3. Finished getting location`);
 })();
 */
-
+/*
 console.log('~~~~~~~ Running Promises in Parallel ~~~~~~');
 
 const get3Countries = async function (c1, c2, c3) {
@@ -320,3 +320,59 @@ const get3Countries = async function (c1, c2, c3) {
 };
 
 get3Countries('peru', 'fiji', 'cuba');
+*/
+
+// console.log(
+//   '~~~~~~~ Other Promise Combinators: race, allSettled and any ~~~~~~'
+// );
+
+// Promise.race - only one the fastest one
+
+// Promise.all
+
+// Promise.any
+
+//
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+// console.log(`### Coding Challenge #2 ####`);
+
+const imgContainer = document.querySelector(`.images`);
+
+let currentImg;
+
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.alt = 'Mountains';
+
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('Image not found'));
+    });
+  });
+};
+
+createImage(`img/img-1.jpg`)
+  .then(img => {
+    currentImg = img;
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage(`img/img-2.jpg`);
+  })
+  .then(img => {
+    currentImg = img;
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+  })
+  .catch(error => console.error(error));
